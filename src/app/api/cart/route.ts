@@ -104,8 +104,8 @@ export async function DELETE(req: NextRequest) {
     const apiResponse = await fetch(apiUrl, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         token: token.token as string,
+        "Content-Type": "application/json",
       },
       cache: "no-store",
     });
@@ -159,15 +159,12 @@ export async function PUT(req: NextRequest) {
         { status: 401 }
       );
     }
-    // const headers = new Headers();
-    // headers.append("Content-Type", "application/json");
-    // headers.append("token", token.token as string);
 
     const apiResponse = await fetch(`${process.env.API}/cart/${productId}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         token: token.token as string,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ count: counter }),
       cache: "no-store",

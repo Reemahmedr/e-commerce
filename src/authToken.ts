@@ -38,7 +38,8 @@ export async function AuthToken() {
       return null;
     }
 
-    return token?.token || null;
+    // return token?.token || null;
+    return authToken
   } catch (error) {
     console.error("Error decoding auth token:", error);
     return null;

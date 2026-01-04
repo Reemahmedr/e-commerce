@@ -34,7 +34,10 @@ export async function POST(req: NextRequest) {
       `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`,
       {
         method: "POST",
-        headers : { token: token.token as string, "Content-Type": "application/json", },
+        headers: {
+          token: token.token as string,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ shippingAddress }),
         cache: "no-store",
       }
@@ -65,5 +68,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-
