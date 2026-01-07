@@ -12,7 +12,7 @@ export default function GetUserOrders({ userOrders }: UserOrdersProps) {
         <p className="text-center text-gray-500 mb-4">
           No orders found for this user 🛒
         </p>
-        <Image width={300} height={300} src={emptyOrder} alt="empty order" />
+        <Image width={500} height={500} src={emptyOrder} alt="empty orders" />
       </div>
     );
   }

@@ -20,7 +20,7 @@ export default function page() {
     },
   });
 
-  const { mutate: delMutate} = useMutation({
+  const { mutate: delMutate } = useMutation({
     mutationFn: RemoveFromWishlist,
     onSuccess: (data, variable) => {
       toast.success(
@@ -57,7 +57,9 @@ export default function page() {
       {data?.count == 0 ? (
         <>
           <div className="flex justify-center my-9 text-5xl capitalize">
-            <h2 className="font-extrabold">Your Wishlist is waiting for you 😎</h2>
+            <h2 className="font-extrabold">
+              Your Wishlist is waiting for you 😎
+            </h2>
           </div>
           <div className="flex justify-center bg-center bg-cover my-24">
             <Image
@@ -84,19 +86,22 @@ export default function page() {
                   <th scope="col" className="px-16 py-3">
                     <span className="sr-only">Image</span>
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Product
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Price
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Brand
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Rating
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Action
                   </th>
                 </tr>
@@ -123,20 +128,27 @@ export default function page() {
                           alt="product image"
                         />
                       </td>
-                      <td className="px-6 py-4 font-semibold text-heading">
+                      <td className="px-6 py-4 font-semibold text-heading text-center">
                         {prod.title}
                       </td>
-                      <td className="px-6 py-4 font-semibold text-heading">
+                      <td className="px-6 py-4 font-semibold text-heading text-center">
                         {prod.price} EGP
                       </td>
-                      <td className="px-6 py-4 font-semibold text-heading">
+                      <td className="px-6 py-4 font-semibold text-heading text-center">
                         {prod.brand.name}
                       </td>
-                      <td className="px-6 py-4 font-semibold text-heading">
+                      <td className="px-6 py-4 font-semibold text-heading text-center">
                         {prod.ratingsAverage}{" "}
                         <i className="fa-solid fa-star text-yellow-300" />
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 font-semibold text-heading text-center">
+                        {prod.quantity === 0 ? (
+                          <p className="text-red-400">❌ Out of stock</p>
+                        ) : (
+                          <p className="text-green-300">✅ In stock</p>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-center">
                         <AddToCartBtn productId={prod._id}></AddToCartBtn>
                       </td>
                     </tr>

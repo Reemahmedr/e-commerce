@@ -1,7 +1,8 @@
 import { decode } from "next-auth/jwt";
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
-export async function AuthToken() {
+export async function AuthToken(req?:NextRequest) {
   try {
     // const authToken = (await cookies()).get("next-auth.session-token")?.value;
 
@@ -16,15 +17,14 @@ export async function AuthToken() {
 
     const authToken = cookieStore.get(cookieName)?.value;
 
+
     if (!authToken) {
-      console.log("No auth token found in cookies");
       return null;
     }
 
     const secret = process.env.NEXTAUTH_SECRET;
 
     if (!secret) {
-      console.error("NEXTAUTH_SECRET is not configured");
       return null;
     }
 
@@ -34,14 +34,13 @@ export async function AuthToken() {
     });
 
     if (!token) {
-      console.log("Token decode returned null");
       return null;
     }
 
-    // return token?.token || null;
-    return authToken
+    // return token.token; // 8yrna da mn token.token ll token.accessToken
+    return token.accessToken as string;
+    // return authToken
   } catch (error) {
-    console.error("Error decoding auth token:", error);
     return null;
   }
 }

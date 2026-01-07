@@ -22,8 +22,6 @@ export default function page() {
       return payLoad;
     },
   });
-
-  console.log("Cart Response:", data);
   const [loadingId, setLoadingId] = useState<null | string>(null);
   const [UpdateId, setUpdateId] = useState<null | string>(null);
 
@@ -92,16 +90,16 @@ export default function page() {
                   <th scope="col" className="px-16 py-3">
                     <span className="sr-only">Image</span>
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Product
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Qty
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Price
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
+                  <th scope="col" className="px-6 py-3 font-medium text-center">
                     Action
                   </th>
                 </tr>
@@ -113,14 +111,14 @@ export default function page() {
                       <td className="p-4">
                         <img
                           src={prod.product.imageCover}
-                          className="w-16 md:w-24 max-w-full max-h-full"
+                          className="w-16 md:w-24 max-w-full max-h-full rounded-2xl"
                           alt="Apple Watch"
                         />
                       </td>
-                      <td className="px-6 py-4 font-semibold text-heading">
+                      <td className="px-6 py-4 font-semibold text-heading text-center">
                         {prod.product.title}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 text-center">
                         <form className="max-w-xs mx-auto">
                           <label htmlFor="counter-input-1" className="sr-only">
                             Choose quantity:
@@ -202,10 +200,10 @@ export default function page() {
                           </div>
                         </form>
                       </td>
-                      <td className="px-6 py-4 font-semibold text-heading">
+                      <td className="px-6 py-4 font-semibold text-heading text-center">
                         {prod.price} EGP
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 text-center">
                         <span
                           onClick={() => handleDeleteItem(prod.product._id)}
                           className="font-medium cursor-pointer text-red-600"

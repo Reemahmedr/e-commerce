@@ -35,7 +35,6 @@ export default function CheckoutForm({ cartId }: { cartId: string }) {
     setLoading(true);
     setPaymentType("online");
     const payload = await OnlinePayment(cartId, data);
-    console.log(payload);
     if (payload.status === "success") {
       setLoading(false);
       window.location.href = payload.session.url;

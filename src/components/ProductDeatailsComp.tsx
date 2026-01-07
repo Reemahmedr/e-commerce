@@ -48,6 +48,7 @@ export default function ProductDeatailsComp({
             <i className="fa-solid fa-star text-amber-300"></i>
           </p>
         </div>
+        {data.quantity === 0 ? <p className="text-red-400">❌ Out of stock</p> : <p className="text-green-300">✅ In stock</p>}
         <AddToCartBtn productId={data?._id}></AddToCartBtn>
       </div>
     </div>

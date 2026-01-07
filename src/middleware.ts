@@ -1,8 +1,9 @@
-import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { AuthToken } from "./authToken";
 
 export default async function proxy(req: NextRequest) {
-  const token = await getToken({ req });
+  // const token = await getToken({ req });
+  const token = await AuthToken();
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));

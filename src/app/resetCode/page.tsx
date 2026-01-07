@@ -40,7 +40,6 @@ export default function page() {
     } else {
       toast.error("Failed to verfiy your code");
     }
-    console.log(payload);
   }
   return (
     <>

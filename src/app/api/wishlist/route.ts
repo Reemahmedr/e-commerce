@@ -1,5 +1,4 @@
 import { AuthToken } from "@/src/authToken";
-import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -52,7 +51,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const token = await getToken({ req });
+  // const token = await getToken({ req });
+  const token = await AuthToken();
 
   if (!token) {
     return NextResponse.json({ error: "unautherized", status: 401 });
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
 
   const res = await fetch(`${process.env.API}/wishlist`, {
     headers: {
-      token: token.token as string,
+      token: token as string,
       "Content-Type": "application/json",
     },
   });
@@ -74,14 +74,14 @@ export async function DELETE(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const productId = searchParams.get("productId");
 
-    const token = await getToken({ req });
+    // const token = await getToken({ req });
+    const token = await AuthToken();
 
     if (!token) {
       return NextResponse.json(
         {
           status: "fail",
-          message:
-            "Unauthorized - Please login to remove items from cart",
+          message: "Unauthorized - Please login to remove items from cart",
         },
         { status: 401 }
       );
@@ -94,7 +94,7 @@ export async function DELETE(req: NextRequest) {
     const apiResponse = await fetch(apiUrl, {
       method: "DELETE",
       headers: {
-        token: token.token as string,
+        token: token as string,
         "Content-Type": "application/json",
       },
       cache: "no-store",

@@ -39,7 +39,7 @@ export default function GetAllOrders() {
     error,
   } = useQuery<OrdersInterface[]>({
     queryKey: ["userOrders", userId],
-    queryFn: () => UserOrders({ userId : userId, token: token! }),
+    queryFn: () => UserOrders({ userId : userId as string, token: token! }),
     enabled: !!userId && !!token,
   });
 

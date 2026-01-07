@@ -1,4 +1,4 @@
-import { getToken } from "next-auth/jwt";
+import { AuthToken } from "@/src/authToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -19,7 +19,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const token = await getToken({ req });
+    // const token = await getToken({ req });
+    const token = await AuthToken();
 
     if (!token) {
       return NextResponse.json(
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
       {
         method: "POST",
         headers: {
-          token: token.token as string,
+          token: token as string,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ shippingAddress }),

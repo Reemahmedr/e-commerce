@@ -1,53 +1,91 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { AddProductToWishList } from "../apis/wishlist/AddProuctToWishList.api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 export default function WhishListIcon({ productId }: { productId: string }) {
   const queryClient = useQueryClient();
-  const [wishlist, setWishList] = useState(false);
+  const { data: session, status } = useSession();
 
-  useEffect(() => {
-    const wishlistItem = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    const isInWishlist = wishlistItem.includes(productId);
-    setWishList(isInWishlist);
-  }, [productId]);
+  const { data: wishlistData } = useQuery({
+    queryKey: ["wishlist"],
+    queryFn: async () => {
+      const res = await fetch("/api/wishlist");
+      return res.json();
+    },
+    enabled: !!session,
+  });
 
-  const { mutate } = useMutation({
-    mutationFn: () => AddProductToWishList({ productId }),
-    onSuccess:()=>{
+  const isInWishlist = wishlistData?.data?.some(
+    (item: any) => item._id === productId || item.id === productId
+  );
+
+  // useEffect(() => {
+  //   const wishlistItem = JSON.parse(localStorage.getItem("wishlist") || "[]");
+  //   const isInWishlist = wishlistItem.includes(productId);
+  //   setWishList(isInWishlist);
+  // }, [productId]);
+
+  // const { mutate } = useMutation({
+  //   mutationFn: () => AddProductToWishList({ productId }),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+  //   },
+  //   onError: () => {
+  //     toast.error("Failed to add product to your wishlist");
+  //   },
+  // });
+  const { mutate: addToWishlist } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/wishlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId }),
+      });
+      if (!res.ok) throw new Error("Failed to add");
+      return res.json();
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+      toast.success("Product added successfully to wishlist");
     },
     onError: () => {
       toast.error("Failed to add product to your wishlist");
     },
   });
 
+  const { mutate: removeFromWishlist } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/wishlist?productId=${productId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to remove");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+      toast.success("Product removed successfully from wishlist");
+    },
+    onError: () => {
+      toast.error("Failed to remove product from wishlist");
+    },
+  });
+
   async function handleWishListIcon(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-
-    const wishlistItems = JSON.parse(localStorage.getItem("wishlist") || "[]");
-
-    const isInWishlist = wishlistItems.includes(productId);
-
-    let updatedWishlist;
-
     if (isInWishlist) {
-      updatedWishlist = wishlistItems.filter((id: string) => id !== productId);
-      setWishList(false);
-      toast.success("product removed successfully from wishlist");
+      removeFromWishlist();
     } else {
-      updatedWishlist = [...wishlistItems, productId];
-      setWishList(true);
-      toast.success("product added successfully to wishlist");
+      addToWishlist();
     }
+  }
+  if (status === "loading") {
+    return null;
+  }
 
-    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-
-    mutate();
+  if (!session) {
+    return null;
   }
   return (
     <>
@@ -56,7 +94,7 @@ export default function WhishListIcon({ productId }: { productId: string }) {
           <i
             onClick={handleWishListIcon}
             className={`z-10 ${
-              wishlist ? "fa-solid fa-heart" : "fa-regular fa-heart"
+              isInWishlist ? "fa-solid fa-heart" : "fa-regular fa-heart"
             }`}
           />
         </span>

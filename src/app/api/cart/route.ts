@@ -1,4 +1,4 @@
-import { getToken } from "next-auth/jwt";
+import { AuthToken } from "@/src/authToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const token = await getToken({ req });
-
+    // const token = await getToken({ req });  // 8yrna da mn kda ll satr aly t7t fy kol al functions
+    const token = await AuthToken(req);
     if (!token) {
       return NextResponse.json(
         {
@@ -26,8 +26,9 @@ export async function POST(req: NextRequest) {
 
     const apiResponse = await fetch(`${process.env.API}/cart`, {
       method: "POST",
+      credentials: "include",
       headers: {
-        token: token.token as string,
+        token: token as string,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ productId }),
@@ -61,15 +62,17 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const token = await getToken({ req });
+  // const token = await getToken({ req }); // 8yrna da mn kda ll satr aly t7t fy kol al functions
+  const token = await AuthToken(req);
 
   if (!token) {
     return NextResponse.json({ error: "unautherized", status: 401 });
   }
 
   const res = await fetch(`${process.env.API}/cart`, {
+    credentials: "include",
     headers: {
-      token: token.token as string,
+      token: token as string,
       "Content-Type": "application/json",
     },
     cache: "no-store",
@@ -84,8 +87,8 @@ export async function DELETE(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const productId = searchParams.get("productId");
 
-    const token = await getToken({ req });
-    console.log("TOKEN SENT TO API:", token?.token);
+    // const token = await getToken({ req });  // 8yrna da mn kda ll satr aly t7t fy kol al functions
+    const token = await AuthToken(req);
 
     if (!token) {
       return NextResponse.json(
@@ -103,8 +106,9 @@ export async function DELETE(req: NextRequest) {
 
     const apiResponse = await fetch(apiUrl, {
       method: "DELETE",
+      credentials: "include",
       headers: {
-        token: token.token as string,
+        token: token as string,
         "Content-Type": "application/json",
       },
       cache: "no-store",
@@ -151,7 +155,8 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    const token = await getToken({ req });
+    // const token = await getToken({ req });  // 8yrna da mn kda ll satr aly t7t fy kol al functions
+    const token = await AuthToken(req);
 
     if (!token) {
       return NextResponse.json(
@@ -162,8 +167,9 @@ export async function PUT(req: NextRequest) {
 
     const apiResponse = await fetch(`${process.env.API}/cart/${productId}`, {
       method: "PUT",
+      credentials: "include",
       headers: {
-        token: token.token as string,
+        token: token as string,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ count: counter }),
